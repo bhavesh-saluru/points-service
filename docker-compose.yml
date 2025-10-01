@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: kudospoints-postgres
+    environment:
+      - POSTGRES_USER=kudospoints_user
+      - POSTGRES_PASSWORD=kudospoints_password
+      - POSTGRES_DB=kudospoints_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
