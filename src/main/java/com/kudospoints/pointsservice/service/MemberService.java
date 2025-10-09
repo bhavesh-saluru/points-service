@@ -41,4 +41,9 @@ public class MemberService {
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
     }
+    // Calling findAll() would try to load all 10 million records from the database into your application's memory.
+    // This would, without a doubt, crash the application with an OutOfMemoryError.
+    // The solution is pagination. Instead of asking for "all members," the client should ask for a specific "page"
+    // of results (e.g., "give me the first 20 members," then "give me the next 20 members," and so on).
+    // Spring Data JPA has incredible built-in support for this with the Pageable interface.
 }

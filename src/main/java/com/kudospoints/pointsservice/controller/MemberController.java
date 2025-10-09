@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,11 +31,10 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<List<MemberResponse>> getAllMembers() {
         List<Member> membersList = memberService.getAllMembers();
-        List<MemberResponse> responseList = new ArrayList<>();
-        for (Member member : membersList) {
-            responseList.add(mapToMemberResponse(member));
-        }
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+        List<MemberResponse> responseList = membersList.stream()
+                .map(this::mapToMemberResponse)
+                .toList(); // or .collect(Collectors.toList()) in older Java
+        return ResponseEntity.ok(responseList);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +43,6 @@ public class MemberController {
         MemberResponse response = mapToMemberResponse(member);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
     // Helper method to map from our domain object to our response DTO
     private MemberResponse mapToMemberResponse(Member member) {
