@@ -1,0 +1,11 @@
+package com.kudospoints.pointsservice.repository;
+
+import com.kudospoints.pointsservice.domain.PointsLedger;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
+
+@Repository
+public interface PointsLedgerRepository extends JpaRepository<PointsLedger, UUID> {
+}
