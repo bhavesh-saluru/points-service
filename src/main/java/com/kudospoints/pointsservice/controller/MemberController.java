@@ -1,8 +1,11 @@
 package com.kudospoints.pointsservice.controller;
 
 import com.kudospoints.pointsservice.domain.Member;
+import com.kudospoints.pointsservice.domain.PointsLedger;
+import com.kudospoints.pointsservice.dto.AddPointsRequest;
 import com.kudospoints.pointsservice.dto.CreateMemberRequest;
 import com.kudospoints.pointsservice.dto.MemberResponse;
+import com.kudospoints.pointsservice.dto.PointsLedgerResponse;
 import com.kudospoints.pointsservice.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +55,26 @@ public class MemberController {
         response.setEmail(member.getEmail());
         response.setStatus(member.getStatus());
         response.setCreatedAt(member.getCreatedAt());
+        return response;
+    }
+
+    @PostMapping("/{memberId}/transactions")
+    public ResponseEntity<PointsLedgerResponse> addPoints(@PathVariable UUID memberId,
+                                                          @RequestBody AddPointsRequest request) {
+        PointsLedger newLedgerEntry = memberService.addPointsTransaction(memberId, request);
+        PointsLedgerResponse response = mapToLedgerResponse(newLedgerEntry);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    private PointsLedgerResponse mapToLedgerResponse(PointsLedger ledgerEntry) {
+        PointsLedgerResponse response = new PointsLedgerResponse();
+        response.setId(ledgerEntry.getId());
+        response.setMemberId(ledgerEntry.getMember().getId()); // Note how we get the member ID
+        response.setPoints(ledgerEntry.getPoints());
+        response.setType(ledgerEntry.getType());
+        response.setTransactionId(ledgerEntry.getTransactionId());
+        response.setNotes(ledgerEntry.getNotes());
+        response.setCreatedAt(ledgerEntry.getCreatedAt());
         return response;
     }
 }
