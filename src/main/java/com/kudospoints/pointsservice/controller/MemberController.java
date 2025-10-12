@@ -2,10 +2,7 @@ package com.kudospoints.pointsservice.controller;
 
 import com.kudospoints.pointsservice.domain.Member;
 import com.kudospoints.pointsservice.domain.PointsLedger;
-import com.kudospoints.pointsservice.dto.AddPointsRequest;
-import com.kudospoints.pointsservice.dto.CreateMemberRequest;
-import com.kudospoints.pointsservice.dto.MemberResponse;
-import com.kudospoints.pointsservice.dto.PointsLedgerResponse;
+import com.kudospoints.pointsservice.dto.*;
 import com.kudospoints.pointsservice.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,5 +73,12 @@ public class MemberController {
         response.setNotes(ledgerEntry.getNotes());
         response.setCreatedAt(ledgerEntry.getCreatedAt());
         return response;
+    }
+
+    @GetMapping("/{memberId}/balance")
+    public ResponseEntity<BalanceResponse> getBalance(@PathVariable UUID memberId) {
+        Integer balance = memberService.getMemberBalance(memberId);
+        BalanceResponse response = new BalanceResponse(memberId, balance);
+        return ResponseEntity.ok(response);
     }
 }

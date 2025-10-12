@@ -71,4 +71,15 @@ public class MemberService {
         // 4. Persist and return the new entry
         return pointsLedgerRepository.save(newTransaction);
     }
+
+    public Integer getMemberBalance(UUID memberId) {
+        // First, ensure the member exists. This will throw a 404 if not found.
+        getMemberById(memberId);
+
+        // Call our new custom repository method
+        Integer balance = pointsLedgerRepository.getBalanceForMember(memberId);
+
+        // Handle the case where a member has no transactions yet
+        return (balance == null) ? 0 : balance;
+    }
 }
