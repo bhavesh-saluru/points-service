@@ -81,4 +81,13 @@ public class MemberController {
         BalanceResponse response = new BalanceResponse(memberId, balance);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{memberId}/transactions")
+    public ResponseEntity<List<PointsLedgerResponse>> getTransactionHistory(@PathVariable UUID memberId) {
+        List<PointsLedger> history = memberService.getTransactionHistoryForMember(memberId);
+        List<PointsLedgerResponse> response = history.stream()
+                .map(this::mapToLedgerResponse)
+                .toList();
+        return ResponseEntity.ok(response);
+    }
 }

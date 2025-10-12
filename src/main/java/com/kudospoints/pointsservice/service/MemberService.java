@@ -82,4 +82,12 @@ public class MemberService {
         // Handle the case where a member has no transactions yet
         return (balance == null) ? 0 : balance;
     }
+
+    public List<PointsLedger> getTransactionHistoryForMember(UUID memberId) {
+        // Again, we reuse our existence check for free.
+        getMemberById(memberId);
+
+        // Call our new, super-descriptive repository method.
+        return pointsLedgerRepository.findByMemberIdOrderByCreatedAtDesc(memberId);
+    }
 }
