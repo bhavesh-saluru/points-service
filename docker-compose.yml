@@ -1,9 +1,8 @@
-version: '3.8'
-
 services:
+  # The Database Service
   postgres:
     image: postgres:15-alpine
-    container_name: kudospoints-postgres
+    container_name: postgres
     environment:
       - POSTGRES_USER=kudospoints_user
       - POSTGRES_PASSWORD=kudospoints_password
@@ -13,5 +12,17 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  # The Application Service
+  app:
+    build: . # tells compose to look for Dockerfile and build an image from it.
+    container_name: points-bank
+    ports:
+      - "8080:8080"
+    environment:
+      # overrides props in app.props
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/kudospoints_db
+    depends_on:
+      - postgres
+
 volumes:
-  postgres-data:
+  postgres-data: {}
